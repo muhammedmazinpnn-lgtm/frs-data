@@ -2,29 +2,33 @@ document.getElementById("studentForm").addEventListener("submit", async function
     e.preventDefault();
 
     const name = document.getElementById("name").value.trim();
-    const phone = document.getElementById("phone").value.trim();
+    const phoneInput = document.getElementById("phone").value.trim();
     const message = document.getElementById("message");
 
     message.innerText = "";
 
-    // 🔹 Validation
+    // 🔹 Name Validation
     if (name === "") {
         message.style.color = "red";
         message.innerText = "Name is required";
         return;
     }
 
-    if (!/^[0-9]{12}$/.test(phone)) {
+    // 🔹 Phone Validation (ONLY 10 digits)
+    if (!/^[0-9]{10}$/.test(phoneInput)) {
         message.style.color = "red";
-        message.innerText = "Phone must be exactly 12 digits";
+        message.innerText = "Phone must be exactly 10 digits";
         return;
     }
+
+    // 🔹 Add +91 country code before saving
+    const fullPhone = "91" + phoneInput;
 
     // 🔹 Check if already registered
     const { data: existingUser } = await client
         .from("students")
         .select("*")
-        .eq("phone", phone);
+        .eq("phone", fullPhone);
 
     if (existingUser && existingUser.length > 0) {
         message.style.color = "orange";
@@ -35,7 +39,7 @@ document.getElementById("studentForm").addEventListener("submit", async function
     // 🔹 Insert if not exists
     const { error } = await client
         .from("students")
-        .insert([{ name: name, phone: phone }]);
+        .insert([{ name: name, phone: fullPhone }]);
 
     if (error) {
         message.style.color = "red";

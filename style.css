@@ -47,3 +47,19 @@ button:hover {
     margin-top: 10px;
     font-weight: bold;
 }
+.phone-container {
+    display: flex;
+    align-items: center;
+}
+
+.country-code {
+    background: #eee;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-right: none;
+    border-radius: 5px 0 0 5px;
+}
+
+.phone-container input {
+    border-radius: 0 5px 5px 0;
+}
