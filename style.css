@@ -80,10 +80,13 @@ button:hover {
     display: flex;
     align-items: center;
     font-weight: bold;
+    height: 42px;              /* fixed height */
 }
 
 .phone-container input {
     flex: 1;
+    height: 42px;              /* same height */
+    padding: 0 10px;           /* remove vertical padding */
     border: 1px solid #ccc;
     border-radius: 0 5px 5px 0;
     outline: none;
