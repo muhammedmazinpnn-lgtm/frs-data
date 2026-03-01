@@ -50,6 +50,8 @@ document.addEventListener("DOMContentLoaded", function () {
             if (existingUser && existingUser.length > 0) {
                 message.style.color = "orange";
                 message.innerText = "You are already registered!";
+                btn.disabled = false;
+                btn.innerText = "Register";
                 return;
             }
 
