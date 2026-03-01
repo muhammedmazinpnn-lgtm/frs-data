@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const name = document.getElementById("name").value.trim();
         const phone = document.getElementById("phone").value.trim();
         const message = document.getElementById("message");
+        const btn = form.querySelector("button");
 
         message.innerText = "";
         message.style.color = "red";
@@ -31,11 +32,15 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
+        // Show loading state
+        btn.disabled = true;
+        btn.innerText = "Registering...";
+
         try {
 
-            // ✅ Check if phone already exists
+            // Check if phone already exists
             const { data: existingUser, error: checkError } = await client
-                .from("frs")   // ✅ ONLY frs
+                .from("frs")
                 .select("id")
                 .eq("phone", phone)
                 .limit(1);
@@ -48,9 +53,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
-            // ✅ Insert into frs table
+            // Insert into frs table
             const { error: insertError } = await client
-                .from("frs")   // ✅ ONLY frs
+                .from("frs")
                 .insert([{ name: name, phone: phone }]);
 
             if (insertError) throw insertError;
@@ -63,6 +68,10 @@ document.addEventListener("DOMContentLoaded", function () {
             message.style.color = "red";
             message.innerText = "Error: " + err.message;
             console.error(err);
+        } finally {
+            // Always re-enable button
+            btn.disabled = false;
+            btn.innerText = "Register";
         }
     });
 
