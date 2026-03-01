@@ -48,12 +48,12 @@ document.addEventListener("DOMContentLoaded", function () {
             if (checkError) throw checkError;
 
             if (existingUser && existingUser.length > 0) {
-                message.style.color = "orange";
-                message.innerText = "You are already registered!";
-                btn.disabled = false;
-                btn.innerText = "Register";
-                return;
-            }
+    message.style.color = "orange";
+    message.innerText = "You are already registered!";
+    btn.disabled = false;      // ← manually reset
+    btn.innerText = "Register"; // ← manually reset
+    return;
+}
 
             // Insert into frs table
             const { error: insertError } = await client
