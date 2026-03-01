@@ -20,25 +20,20 @@ document.addEventListener("DOMContentLoaded", function () {
         message.innerText = "";
         message.style.color = "red";
 
-        // Name validation
         if (!name) {
             message.innerText = "Name is required";
             return;
         }
 
-        // Phone validation (10 digits only)
         if (!/^[0-9]{10}$/.test(phone)) {
             message.innerText = "Phone must be exactly 10 digits";
             return;
         }
 
-        // Show loading state
         btn.disabled = true;
         btn.innerText = "Registering...";
 
         try {
-
-            // Check if phone already exists
             const { data: existingUser, error: checkError } = await client
                 .from("frs")
                 .select("id")
@@ -48,14 +43,13 @@ document.addEventListener("DOMContentLoaded", function () {
             if (checkError) throw checkError;
 
             if (existingUser && existingUser.length > 0) {
-    message.style.color = "orange";
-    message.innerText = "You are already registered!";
-    btn.disabled = false;      // ← manually reset
-    btn.innerText = "Register"; // ← manually reset
-    return;
-}
+                message.style.color = "orange";
+                message.innerText = "You are already registered!";
+                btn.disabled = false;
+                btn.innerText = "Register";
+                return;
+            }
 
-            // Insert into frs table
             const { error: insertError } = await client
                 .from("frs")
                 .insert([{ name: name, phone: phone }]);
@@ -71,7 +65,6 @@ document.addEventListener("DOMContentLoaded", function () {
             message.innerText = "Error: " + err.message;
             console.error(err);
         } finally {
-            // Always re-enable button
             btn.disabled = false;
             btn.innerText = "Register";
         }
