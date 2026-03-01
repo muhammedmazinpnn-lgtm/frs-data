@@ -1,65 +1,106 @@
+/* Reset */
+* {
+    box-sizing: border-box;
+}
+
+/* Body */
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f6f9;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;   /* changed from height to min-height */
     margin: 0;
+    padding: 20px;       /* added padding for mobile */
 }
 
+/* Container */
 .container {
     background: white;
     padding: 30px;
-    width: 350px;
+    width: 100%;
+    max-width: 350px;   /* responsive width */
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 
+/* Heading */
 h2 {
     text-align: center;
+    margin-bottom: 20px;
 }
 
+/* Inputs */
 input {
     width: 100%;
     padding: 10px;
     margin-bottom: 15px;
     border-radius: 5px;
     border: 1px solid #ccc;
+    font-size: 14px;
 }
 
+/* Button */
 button {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     background: #007bff;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    font-size: 15px;
 }
 
 button:hover {
     background: #0056b3;
 }
 
+/* Message */
 #message {
     text-align: center;
     margin-top: 10px;
     font-weight: bold;
 }
+
+/* Phone Section */
 .phone-container {
     display: flex;
-    align-items: center;
+    width: 100%;
+    margin-bottom: 15px;
 }
 
 .country-code {
     background: #eee;
-    padding: 10px;
+    padding: 10px 12px;
     border: 1px solid #ccc;
     border-right: none;
     border-radius: 5px 0 0 5px;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
 }
 
 .phone-container input {
+    flex: 1;
+    border: 1px solid #ccc;
     border-radius: 0 5px 5px 0;
+    outline: none;
+}
+
+/* 📱 Mobile Responsive */
+@media (max-width: 480px) {
+    .container {
+        padding: 20px;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+
+    button {
+        font-size: 14px;
+        padding: 10px;
+    }
 }

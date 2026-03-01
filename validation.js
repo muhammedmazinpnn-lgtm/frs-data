@@ -14,21 +14,28 @@ document.getElementById("studentForm").addEventListener("submit", async function
         return;
     }
 
-    // 🔹 Phone Validation (ONLY 10 digits)
+    // 🔹 Phone Validation (10 digits only)
     if (!/^[0-9]{10}$/.test(phoneInput)) {
         message.style.color = "red";
         message.innerText = "Phone must be exactly 10 digits";
         return;
     }
 
-    // 🔹 Add +91 country code before saving
+    // Add country code
     const fullPhone = "91" + phoneInput;
 
-    // 🔹 Check if already registered
-    const { data: existingUser } = await client
+    // 🔹 Check if BOTH name and phone already exist
+    const { data: existingUser, error: checkError } = await client
         .from("students")
         .select("*")
+        .eq("name", name)
         .eq("phone", fullPhone);
+
+    if (checkError) {
+        message.style.color = "red";
+        message.innerText = "Error checking registration";
+        return;
+    }
 
     if (existingUser && existingUser.length > 0) {
         message.style.color = "orange";
@@ -36,7 +43,7 @@ document.getElementById("studentForm").addEventListener("submit", async function
         return;
     }
 
-    // 🔹 Insert if not exists
+    // 🔹 Insert new record
     const { error } = await client
         .from("students")
         .insert([{ name: name, phone: fullPhone }]);
