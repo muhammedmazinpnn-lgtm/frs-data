@@ -1,5 +1,10 @@
 const { createClient } = supabase;
-const client = createClient("https://hbzhwjnfvyacxahjmyxn.supabase.co", "sb_publishable_-w3EHUMrPeBJe7EMbwGuKQ_aZlcEmbE");
+
+const client = createClient(
+    "https://hbzhwjnfvyacxahjmyxn.supabase.co",
+    "sb_publishable_-w3EHUMrPeBJe7EMbwGuKQ_aZlcEmbE"
+);
+
 document.addEventListener("DOMContentLoaded", function () {
 
     const form = document.getElementById("studentForm");
@@ -28,24 +33,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
         try {
 
-            // 🔹 Check if phone already exists
+            // ✅ Check if phone already exists
             const { data: existingUser, error: checkError } = await client
-                .from("frs")
+                .from("frs")   // ✅ ONLY frs
                 .select("id")
                 .eq("phone", phone)
                 .limit(1);
 
             if (checkError) throw checkError;
 
-            if (existingUser.length > 0) {
+            if (existingUser && existingUser.length > 0) {
                 message.style.color = "orange";
                 message.innerText = "You are already registered!";
                 return;
             }
 
-            // 🔹 Insert new record (ONLY 10 digits stored)
+            // ✅ Insert into frs table
             const { error: insertError } = await client
-                .from("students")
+                .from("frs")   // ✅ ONLY frs
                 .insert([{ name: name, phone: phone }]);
 
             if (insertError) throw insertError;
