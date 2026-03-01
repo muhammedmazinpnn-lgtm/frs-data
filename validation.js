@@ -8,51 +8,56 @@ document.addEventListener("DOMContentLoaded", function () {
         e.preventDefault();
 
         const name = document.getElementById("name").value.trim();
-        const phoneInput = document.getElementById("phone").value.trim();
+        const phone = document.getElementById("phone").value.trim();
         const message = document.getElementById("message");
 
         message.innerText = "";
         message.style.color = "red";
 
+        // Name validation
         if (!name) {
             message.innerText = "Name is required";
             return;
         }
 
-        if (!/^[0-9]{10}$/.test(phoneInput)) {
+        // Phone validation (10 digits only)
+        if (!/^[0-9]{10}$/.test(phone)) {
             message.innerText = "Phone must be exactly 10 digits";
             return;
         }
 
-        const fullPhone = "91" + phoneInput;
+        try {
 
-        const { data: existingUser, error } = await client
-            .from("students")
-            .select("id")
-            .eq("phone", fullPhone)
-            .limit(1);
+            // 🔹 Check if phone already exists
+            const { data: existingUser, error: checkError } = await client
+                .from("frs")
+                .select("id")
+                .eq("phone", phone)
+                .limit(1);
 
-        if (error) {
-            message.innerText = error.message;
-            return;
-        }
+            if (checkError) throw checkError;
 
-        if (existingUser.length > 0) {
-            message.style.color = "orange";
-            message.innerText = "You are already registered!";
-            return;
-        }
+            if (existingUser.length > 0) {
+                message.style.color = "orange";
+                message.innerText = "You are already registered!";
+                return;
+            }
 
-        const { error: insertError } = await client
-            .from("students")
-            .insert([{ name: name, phone: fullPhone }]);
+            // 🔹 Insert new record (ONLY 10 digits stored)
+            const { error: insertError } = await client
+                .from("students")
+                .insert([{ name: name, phone: phone }]);
 
-        if (insertError) {
-            message.innerText = insertError.message;
-        } else {
+            if (insertError) throw insertError;
+
             message.style.color = "green";
             message.innerText = "Registration successful!";
             form.reset();
+
+        } catch (err) {
+            message.style.color = "red";
+            message.innerText = "Error: " + err.message;
+            console.error(err);
         }
     });
 
