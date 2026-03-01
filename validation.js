@@ -1,10 +1,3 @@
-// 🔹 Replace with your real values
-const supabaseUrl = "https://hbzhwjnfvyacxahjmyxn.supabase.co";
-const supabaseKey = "sb_publishable_-w3EHUMrPeBJe7EMbwGuKQ_aZlcEmbE";
-
-const { createClient } = supabase;
-const client = createClient(supabaseUrl, supabaseKey);
-
 document.getElementById("studentForm").addEventListener("submit", async function(e) {
     e.preventDefault();
 
@@ -12,20 +5,34 @@ document.getElementById("studentForm").addEventListener("submit", async function
     const phone = document.getElementById("phone").value.trim();
     const message = document.getElementById("message");
 
-    // 🔹 JS VALIDATION
+    message.innerText = "";
+
+    // 🔹 Validation
     if (name === "") {
         message.style.color = "red";
         message.innerText = "Name is required";
         return;
     }
 
-    if (!/^[0-9]{10}$/.test(phone)) {
+    if (!/^[0-9]{12}$/.test(phone)) {
         message.style.color = "red";
-        message.innerText = "Phone must be exactly 10 digits";
+        message.innerText = "Phone must be exactly 12 digits";
         return;
     }
 
-    // 🔹 Insert into Supabase
+    // 🔹 Check if already registered
+    const { data: existingUser } = await client
+        .from("students")
+        .select("*")
+        .eq("phone", phone);
+
+    if (existingUser && existingUser.length > 0) {
+        message.style.color = "orange";
+        message.innerText = "You are already registered!";
+        return;
+    }
+
+    // 🔹 Insert if not exists
     const { error } = await client
         .from("students")
         .insert([{ name: name, phone: phone }]);
@@ -35,7 +42,7 @@ document.getElementById("studentForm").addEventListener("submit", async function
         message.innerText = "Error: " + error.message;
     } else {
         message.style.color = "green";
-        message.innerText = "Student Registered Successfully!";
+        message.innerText = "Registration successful!";
         document.getElementById("studentForm").reset();
     }
 });
