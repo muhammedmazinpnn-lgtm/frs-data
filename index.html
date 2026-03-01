@@ -8,28 +8,36 @@
 </head>
 <body>
 
-<div class="container">
-    <h2>Student Registration</h2>
+    <div class="container">
+        <h2>Student Registration</h2>
 
-    <form id="studentForm">
-        <label>Name:</label>
-        <input type="text" id="name" placeholder="Enter your name">
+        <form id="studentForm">
 
-        <label>Phone Number:</label>
+            <label for="name">Name:</label>
+            <input type="text"
+                   id="name"
+                   placeholder="Enter your name"
+                   required>
 
-<div class="phone-container">
-    <span class="country-code">+91</span>
-    <input type="text"
-           id="phone"
-           placeholder="Enter 10 digit number"
-           maxlength="10"
-           required>
-</div>
-        <button type="submit">Register</button>
-        <p id="message"></p>
-    </form>
-</div>
+            <label for="phone">Phone Number:</label>
 
-<script src="validation.js"></script>
+            <div class="phone-container">
+                <div class="country-code">+91</div>
+                <input type="text"
+                       id="phone"
+                       placeholder="Enter 10 digit number"
+                       maxlength="10"
+                       required>
+            </div>
+
+            <button type="submit">Register</button>
+
+            <p id="message"></p>
+
+        </form>
+    </div>
+
+    <script src="validation.js"></script>
+
 </body>
 </html>
